@@ -22,6 +22,8 @@ Your final app should:
 - Display the plan clearly (and ideally explain the reasoning)
 - Include tests for the most important scheduling behaviors
 
+Main goals: enter information, add/edit tasks, generate daily schedule, display plan + reasoning, include tests for scheduling reason
+
 ## Getting started
 
 ### Setup

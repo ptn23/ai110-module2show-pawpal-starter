@@ -5,7 +5,12 @@
 **a. Initial design**
 
 - Briefly describe your initial UML design.
+
+Initial: 3 classes that include information, add/edit tasks, generate daily schedule. User will be at the top, and add/edit tasks along with generate daily schedule will be below.
+
 - What classes did you include, and what responsibilities did you assign to each?
+User: enter information, add/edit tasks, button that makes the "machine" generate schedule
+"Machine": helps considering what tasks is more relevant, generate schedule
 
 **b. Design changes**
 

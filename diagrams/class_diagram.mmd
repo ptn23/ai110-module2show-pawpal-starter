@@ -1,0 +1,56 @@
+%% PawPal+ class diagram (Mermaid)
+classDiagram
+    class User {
+        +String name
+        +dict ownerPreferences
+        +int timeAvailable
+        +List~Pet~ pets
+        +enter_info()
+        +add_pet(Pet pet)
+        +edit_pet(int pet_id, Pet updates)
+        +remove_pet(int pet_id)
+        +generate_schedule_for_pet(int pet_id) List~DailyShow~
+    }
+
+    class Generator {
+        +List~DailyShow~ tasks
+        +dict constraints
+        +dict algorithmParams
+        +score_task(DailyShow task) float
+        +prioritize_tasks() List~DailyShow~
+        +generate_schedule(int timeAvailable) List~DailyShow~
+        +explain_reasoning(List~DailyShow~ schedule) String
+    }
+
+    class DailyShow {
+        +int id
+        +String name
+        +String category
+        +int duration_minutes
+        +int priority
+        +String recurrence
+        +date last_done
+        +String notes
+        +is_due() bool
+        +to_dict() dict
+    }
+
+    class Pet {
+        +int id
+        +String name
+        +String species
+        +int age_years
+        +String preferences
+        +List~DailyShow~ tasks
+        +add_task(DailyShow task)
+        +edit_task(int task_id, DailyShow updates)
+        +remove_task(int task_id)
+        +list_tasks() List~DailyShow~
+    }
+
+
+    User "1" --> "*" Pet : owns
+    Pet "1" --> "*" DailyShow : has
+    User ..> Generator : uses
+    Generator "1" o-- "0..*" DailyShow : scores/ranks
+    
