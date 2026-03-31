@@ -6,16 +6,21 @@
 
 - Briefly describe your initial UML design.
 
-Initial: 3 classes that include information, add/edit tasks, generate daily schedule. User will be at the top, and add/edit tasks along with generate daily schedule will be below.
+Initial: User -> Pet -> DailyShow, Generator on the side (same tier as User)
 
 - What classes did you include, and what responsibilities did you assign to each?
-User: enter information, add/edit tasks, button that makes the "machine" generate schedule
-"Machine": helps considering what tasks is more relevant, generate schedule
+    - User: enter information, add/edit tasks, button that makes the "machine" generate schedule
+    - Generator: helps considering what tasks is more relevant, generate schedule
+    - Pet: general information of pet, their preferences, the tasks they do
+    - DailyShow: the details of the tasks the pets do
 
 **b. Design changes**
 
 - Did your design change during implementation?
+Yes
 - If yes, describe at least one change and why you made it.
+Added CRUD: Retrieve and establish connection between User, Pet, and Generator classes
+Added is_due to check when is the task is considered due.
 
 ---
 

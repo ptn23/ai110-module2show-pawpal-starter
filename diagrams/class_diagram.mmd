@@ -9,20 +9,19 @@ classDiagram
         +add_pet(Pet pet)
         +edit_pet(int pet_id, Pet updates)
         +remove_pet(int pet_id)
-        +generate_schedule_for_pet(int pet_id) List~DailyShow~
+        +generate_schedule_for_pet(int pet_id) List~Task~
     }
-
-    class Generator {
-        +List~DailyShow~ tasks
+    class Scheduler {
+        +List~Task~ tasks
         +dict constraints
         +dict algorithmParams
-        +score_task(DailyShow task) float
-        +prioritize_tasks() List~DailyShow~
-        +generate_schedule(int timeAvailable) List~DailyShow~
-        +explain_reasoning(List~DailyShow~ schedule) String
+        +score_task(Task task) float
+        +prioritize_tasks() List~Task~
+        +generate_schedule(int timeAvailable) List~Task~
+        +explain_reasoning(List~Task~ schedule) String
     }
 
-    class DailyShow {
+    class Task {
         +int id
         +String name
         +String category
@@ -34,23 +33,22 @@ classDiagram
         +is_due() bool
         +to_dict() dict
     }
-
     class Pet {
         +int id
         +String name
         +String species
         +int age_years
         +String preferences
-        +List~DailyShow~ tasks
-        +add_task(DailyShow task)
-        +edit_task(int task_id, DailyShow updates)
+        +List~Task~ tasks
+        +add_task(Task task)
+        +edit_task(int task_id, Task updates)
         +remove_task(int task_id)
-        +list_tasks() List~DailyShow~
+        +list_tasks() List~Task~
     }
 
 
     User "1" --> "*" Pet : owns
-    Pet "1" --> "*" DailyShow : has
-    User ..> Generator : uses
-    Generator "1" o-- "0..*" DailyShow : scores/ranks
+    Pet "1" --> "*" Task : has
+    User ..> Scheduler : uses
+    Scheduler "1" o-- "0..*" Task : scores/ranks
     
