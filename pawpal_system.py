@@ -5,11 +5,11 @@ from datetime import date
 
 
 @dataclass
-class DailyShow:
+class DailyShow :
 	"""Represents a pet care task (previously called DailyShow / Task)."""
 	id: int
 	name: str
-	category: str = "general"
+	category: str
 	duration_minutes: int = 0
 	priority: int = 0
 	recurrence: Optional[str] = None
