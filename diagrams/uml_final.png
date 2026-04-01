@@ -12,13 +12,18 @@ classDiagram
         +generate_schedule_for_pet(int pet_id) List~Task~
     }
     class Scheduler {
-        +List~Task~ tasks
+        +Pet? pet
+        +dict user_prefs
         +dict constraints
-        +dict algorithmParams
+        +dict algorithm_params
+        -_score_cache: dict
         +score_task(Task task) float
+        +sort_by_time(List~Task~ tasks) List~Task~
         +prioritize_tasks() List~Task~
-        +generate_schedule(int timeAvailable) List~Task~
-        +explain_reasoning(List~Task~ schedule) String
+        +generate_schedule(int timeAvailable) List~ScheduledItem~
+        +mark_task_complete(int task_id, date? done_date) Task?
+        +explain_reasoning(List~ScheduledItem~ schedule) String
+        +same_schedule(ScheduledItem a, ScheduledItem b) bool
     }
 
     class Task {
@@ -30,15 +35,17 @@ classDiagram
         +String recurrence
         +date last_done
         +String notes
+        +bool completed
         +is_due() bool
         +to_dict() dict
+        +mark_complete(date? done_date)
     }
     class Pet {
         +int id
         +String name
         +String species
         +int age_years
-        +String preferences
+        +List~String~ preferences
         +List~Task~ tasks
         +add_task(Task task)
         +edit_task(int task_id, Task updates)
@@ -46,9 +53,17 @@ classDiagram
         +list_tasks() List~Task~
     }
 
+    class ScheduledItem {
+        +Task task
+        +int start_minute
+        +int end_minute
+    }
+
 
     User "1" --> "*" Pet : owns
     Pet "1" --> "*" Task : has
-    User ..> Scheduler : uses
-    Scheduler "1" o-- "0..*" Task : scores/ranks
+    User ..> Scheduler : delegates generate_schedule_for_pet
+    Scheduler "1" --> "0..1" Pet : holds/uses
+    Scheduler "1" o-- "0..*" ScheduledItem : produces
+    ScheduledItem --> Task : references
     

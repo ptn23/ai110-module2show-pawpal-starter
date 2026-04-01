@@ -140,3 +140,5 @@ if st.button("Generate schedule"):
             st.table(rows)
             gen = Scheduler(pet=pet, user_prefs=owner.owner_preferences)
             st.markdown(gen.explain_reasoning(schedule))
+            st.warning(gen.detect_time_conflicts(pets=owner.pets))
+            st.table(owner.filter_tasks(pet_name=pet.name, completed=False))

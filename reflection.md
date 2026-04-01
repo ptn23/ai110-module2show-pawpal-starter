@@ -47,11 +47,13 @@ Better, more detailed code
 
 - How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
 - What kinds of prompts or questions were most helpful?
+Debugging and factoring, mostly what the tasks ask. Most helpful: streamlit
 
 **b. Judgment and verification**
 
 - Describe one moment where you did not accept an AI suggestion as-is.
 - How did you evaluate or verify what the AI suggested?
+In section 4 when there's the extend your Scheduler to detect if two tasks for the same pet (or different pets) are scheduled at the same time. AI suggest a significantly longer and unnecessarily hard code, while all we need to do is compare animals and their begin/end time in tasks.
 
 ---
 
@@ -62,10 +64,14 @@ Better, more detailed code
 - What behaviors did you test?
 - Why were these tests important?
 
+add user/pets, sort by time, mark complete with recurrence, filter tasks, detect conflicts because they are the main functions
+
 **b. Confidence**
 
 - How confident are you that your scheduler works correctly?
 - What edge cases would you test next if you had more time?
+
+Mostly. I would want to add edge cases if different animals can have something similar to a break time in which no actions/tasks can be added
 
 ---
 
@@ -74,11 +80,16 @@ Better, more detailed code
 **a. What went well**
 
 - What part of this project are you most satisfied with?
+Getting everything correctly installed and done
 
 **b. What you would improve**
 
 - If you had another iteration, what would you improve or redesign?
+Improve: I found bugs in my streamlit app
 
 **c. Key takeaway**
 
 - What is one important thing you learned about designing systems or working with AI on this project?
+You have to have a solid grip of code and what they do, as AI is prone to hallucination.
+
+ <a href="/ai110-week5/ai110-module2show-pawpal-starter/rand.png" target="_blank"><img src='/ai110-week5/ai110-module2show-pawpal-starter/rand.png' title='PawPal App' width='' alt='PawPal App' class='center-block' /></a>.
