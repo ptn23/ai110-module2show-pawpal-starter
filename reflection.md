@@ -29,12 +29,15 @@ Added is_due to check when is the task is considered due.
 **a. Constraints and priorities**
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
+Time, priority, preferences
 - How did you decide which constraints mattered most?
-
+Time, because it's often the main reason why people need these apps to begin with
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+More Pythonic code
 - Why is that tradeoff reasonable for this scenario?
+Better, more detailed code
 
 ---
 

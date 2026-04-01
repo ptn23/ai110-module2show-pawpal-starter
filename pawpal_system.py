@@ -46,6 +46,7 @@ class Task:
 		"""Mark the task completed and set its last_done date."""
 		self.completed = True
 		self.last_done = done_date or date.today()
+	
 
 
 @dataclass
@@ -129,6 +130,72 @@ class Scheduler:
 		self._score_cache[task.id] = score
 		return score
 
+	def sort_by_time(self, tasks: Optional[List[Task]] = None) -> List[Task]:
+		"""Return tasks sorted by their `starting_time` string in "HH:MM" format.
+
+		This uses a lambda as the `key` to convert the `starting_time` into
+		total minutes since midnight so that string ordering like "07:30",
+		"11:05" sorts numerically by time.
+		"""
+		if tasks is None:
+			if not self.pet:
+				return []
+			tasks = list(self.pet.tasks)
+
+		def _time_to_minutes(t: Task) -> int:
+			st = (t.starting_time or "")
+			try:
+				h, m = st.split(":")
+				return int(h) * 60 + int(m)
+			except Exception:
+				# Put malformed/missing times at the end
+				return 24 * 60
+
+		# lambda example: key=lambda task: int(task.starting_time.split(':')[0])*60 + int(task.starting_time.split(':')[1])
+		return sorted(tasks, key=lambda task: _time_to_minutes(task))
+
+	def mark_task_complete(self, task_id: int, done_date: Optional[date] = None) -> Optional[Task]:
+		"""Mark a task complete for the scheduler's pet and if the task is
+		recurring (daily or weekly) automatically create the next occurrence.
+
+		Returns the newly-created Task when a recurrence is added, otherwise
+		returns None.
+		"""
+		if not self.pet:
+			raise KeyError("Scheduler has no pet assigned")
+		t = self.pet.get_task(task_id)
+		if t is None:
+			raise KeyError(f"Task {task_id} not found for pet {self.pet.name}")
+
+		# Mark the current task complete
+		t.mark_complete(done_date)
+
+		# If this task recurs, create the next instance and set its last_done
+		# so it won't be due until the next recurrence window.
+		if t.recurrence in ("daily", "weekly"):
+			# pick a new unique id for this pet's tasks
+			existing_ids = [x.id for x in self.pet.tasks]
+			new_id = (max(existing_ids) + 1) if existing_ids else (t.id + 1)
+			new_task = Task(
+				new_id,
+				t.name,
+				t.starting_time,
+				t.category,
+				t.duration_minutes,
+				t.priority,
+				t.recurrence,
+				None,
+				t.notes,
+				False,
+			)
+			# Use timedelta to advance the next due date: setting last_done to
+			# today makes the new task not due until tomorrow (daily) or a
+			# week later (weekly) according to Task.is_due().
+			new_task.last_done = date.today()
+			self.pet.add_task(new_task)
+			return new_task
+		return None
+
 	def prioritize_tasks(self) -> List[Task]:
 		"""Return due tasks sorted by score (descending) and id for determinism."""
 		if not self.pet:
@@ -161,8 +228,24 @@ class Scheduler:
 		if not lines:
 			return "No tasks could be scheduled with the available time."
 		return "; ".join(lines)
+	
+	def same_schedule(self, schedule_one: ScheduledItem, schedule_two: ScheduledItem):
+		"""Return True when two scheduled items do NOT overlap.
 
-
+		Returns True if there is no conflict, False and prints a warning when
+		the intervals overlap. Missing start/end minutes skip conflict checking.
+		"""
+		a_start, a_end = schedule_one.start_minute, schedule_one.end_minute
+		b_start, b_end = schedule_two.start_minute, schedule_two.end_minute
+		if None in (a_start, a_end, b_start, b_end):
+			# Can't determine overlap reliably; treat as no conflict
+			return True
+		# No overlap when one ends <= the other starts
+		if a_end <= b_start or b_end <= a_start:
+			return True
+		print("Warning: time conflict between scheduled items")
+		return False
+	
 class User:
 	"""Represents the owner of one or more pets."""
 
@@ -210,5 +293,21 @@ class User:
 			raise KeyError(f"Pet {pet_id} not found")
 		gen = Scheduler(pet=p, user_prefs=self.owner_preferences)
 		return gen.generate_schedule(self.time_available_minutes)
+
+	def filter_tasks(self, completed: Optional[bool] = None, pet_name: Optional[str] = None) -> List[Task]:
+		"""Return tasks across this user's pets filtered by completion status and/or pet name.
+
+		- If `completed` is True/False, only tasks matching that completion state are returned.
+		- If `pet_name` is provided, only tasks from pets with that name (case-insensitive)
+		  are considered.
+		"""
+		result: List[Task] = []
+		for p in self.pets:
+			if pet_name is not None and p.name.lower() != pet_name.lower():
+				continue
+			for t in p.tasks:
+				if completed is None or t.completed == completed:
+					result.append(t)
+		return result
 
 

@@ -38,8 +38,14 @@ pip install -r requirements.txt
 
 1. Read the scenario carefully and identify requirements and edge cases.
 2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
+
+# Smarter Scheduling
+
+This project now includes advanced scheduling features:
+
+- **Recurring Task Automation:** When a daily or weekly task is marked complete, a new instance is automatically created for the next occurrence, using Python's `timedelta` for accurate due dates.
+- **Time Conflict Detection:** The scheduler can detect if two tasks (for the same or different pets) are scheduled at the same time, returning a warning message instead of crashing.
+- **Flexible Filtering:** Tasks can be filtered by completion status or pet name, making it easy to view and manage schedules.
+- **Robust Sorting:** Tasks are sorted by their `starting_time` using a lambda function for correct chronological order.
+
+These features make PawPal+ more robust and user-friendly for busy pet owners managing complex schedules.
