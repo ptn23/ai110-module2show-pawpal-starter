@@ -49,3 +49,7 @@ This project now includes advanced scheduling features:
 - **Robust Sorting:** Tasks are sorted by their `starting_time` using a lambda function for correct chronological order.
 
 These features make PawPal+ more robust and user-friendly for busy pet owners managing complex schedules.
+
+# Testing PawPal+
+python -m pytest: collected 5 items, assess add user/pets, sort by time, mark complete with recurrence, filter tasks, detect conflicts
+Confidence level: 3-4 stars

@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 from datetime import date, timedelta
 
+#verify: add user/pets, sort by time, mark complete with recurrence, filter tasks, detect conflicts
 
 @dataclass
 class Task:
